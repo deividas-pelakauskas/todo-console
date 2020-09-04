@@ -5,12 +5,17 @@ Author: Deividas Pelakauskas
 
 import datetime
 
+
 class Task:
+    __lastId = 1
 
     def __init__(self, name, deadline, completed):
         self.name = name
         self.deadline = deadline
         self.completed = completed
+        self.id = Task.__lastId
+        Task.__lastId += 1
+
 
 def enter_date():
     """
@@ -25,6 +30,7 @@ def enter_date():
             return task_deadline
         except ValueError:
             print("Incorrect data format, should be DD/MM/YYYY")
+
 
 def main():
     tasks = []
@@ -41,9 +47,9 @@ def main():
         if option == "1":
             if len(tasks) > 0:
                 print("\n")
-                print("DEADLINE\tTASK")
+                print("ID\tDEADLINE\tTASK")
                 for task in tasks:
-                    print(task.deadline + "\t" + task.name)
+                    print(str(task.id) + "\t" + task.deadline + "\t" + task.name)
                 print("\n")
             else:
                 print("Task list is empty")
