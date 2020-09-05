@@ -7,14 +7,14 @@ import datetime
 
 
 class Task:
-    __lastId = 1
+    __last_id = 1
 
     def __init__(self, name, deadline, completed):
         self.name = name
         self.deadline = deadline
         self.completed = completed
-        self.id = Task.__lastId
-        Task.__lastId += 1
+        self.id = Task.__last_id
+        Task.__last_id += 1
 
 
 def enter_date():
@@ -85,9 +85,16 @@ def main():
 
         elif option == "3":
             task_id_input = int(input("Enter task ID\n"))
-            for task in tasks:
-                if task_id_input == task.id and task.completed is False:
-                    task.completed = True
+
+            if any(task.id == task_id_input for task in tasks):  # Check if ID exists in list of tasks at all
+                for task in tasks:
+                    if task_id_input == task.id and task.completed is False:
+                        task.completed = True
+                        print("Operation completed successfully")
+                    elif task_id_input == task.id and task.completed is True:
+                        print("Task with ID " + str(task_id_input) + " has already been marked as completed")
+            else:
+                print("Task with ID " + str(task_id_input) + " does not exist")
 
         elif option == "4":
             pass
