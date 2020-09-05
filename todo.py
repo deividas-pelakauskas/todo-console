@@ -31,6 +31,7 @@ def enter_date():
         except ValueError:
             print("Incorrect data format (DD/MM/YYYY) or other date related error")
 
+
 def view_tasks(tasks, task_status):
     """
     Function to view tasks (used for pending and completed tasks)
@@ -56,6 +57,17 @@ def view_tasks(tasks, task_status):
         print("\n")
     else:
         print("Task list is empty")
+
+
+def check_task_exist(tasks, task_id):
+    """
+    Check if task with given task ID exists in list of tasks
+
+    :param tasks: list of tasks
+    :param task_id: id of the task
+    :return: boolean value that determines whether task exists
+    """
+    return any(task.id == task_id for task in tasks)
 
 
 def main():
@@ -86,7 +98,7 @@ def main():
         elif option == "3":
             task_id_input = int(input("Enter task ID\n"))
 
-            if any(task.id == task_id_input for task in tasks):  # Check if ID exists in list of tasks at all
+            if check_task_exist(tasks, task_id_input):  # Check if ID exists in list of tasks at all
                 for task in tasks:
                     if task_id_input == task.id and task.completed is False:
                         task.completed = True
