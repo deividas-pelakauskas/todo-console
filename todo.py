@@ -29,30 +29,53 @@ def enter_date():
             datetime.datetime.strptime(task_deadline, '%d/%m/%Y')
             return task_deadline
         except ValueError:
-            print("Incorrect data format, should be DD/MM/YYYY")
+            print("Incorrect data format (DD/MM/YYYY) or other date related error")
+
+def view_tasks(tasks, task_status):
+    """
+    Function to view tasks (used for pending and completed tasks)
+
+    :return: pending or completed tasks as human readable string
+    """
+    counter = 0
+
+    if len(tasks) > 0:
+        print("\n")
+        print("ID\tDEADLINE\tTASK")
+
+        for task in tasks:
+            if task.completed is not task_status:
+                print(str(task.id) + "\t" + task.deadline + "\t" + task.name)
+                counter += 1
+
+        if task_status is True and counter == 0:
+            print("There is no pending tasks")
+        elif task_status is False and counter == 0:
+            print("There is no completed tasks")
+
+        print("\n")
+    else:
+        print("Task list is empty")
 
 
 def main():
     tasks = []
+
+    # For testing
     tasks.append(Task("Task 1", "10/09/2020", False))
     tasks.append(Task("Task 2", "15/10/2021", False))
 
-    menu_status = True
+    menu_status = True  # To terminate the menu
     while menu_status:
         option = input("1. View current tasks\n"
                        "2. Add new task\n"
-                       "3. Delete task\n"
+                       "3. Mark as completed\n"
+                       "4. Delete task\n"
+                       "5. View completed tasks\n"
                        "0. Exit\n")
 
         if option == "1":
-            if len(tasks) > 0:
-                print("\n")
-                print("ID\tDEADLINE\tTASK")
-                for task in tasks:
-                    print(str(task.id) + "\t" + task.deadline + "\t" + task.name)
-                print("\n")
-            else:
-                print("Task list is empty")
+            view_tasks(tasks, True)  # To view current pending tasks, True = pending tasks
 
         elif option == "2":
             task_name = input("Enter task name:\n")
@@ -61,7 +84,16 @@ def main():
             print("Successfully added new task")
 
         elif option == "3":
+            task_id_input = int(input("Enter task ID\n"))
+            for task in tasks:
+                if task_id_input == task.id and task.completed is False:
+                    task.completed = True
+
+        elif option == "4":
             pass
+
+        elif option == "5":
+            view_tasks(tasks, False)  # To view already completed tasks, False = completed tasks
 
         elif option == "0":
             menu_status = False
