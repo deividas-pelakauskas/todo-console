@@ -19,7 +19,7 @@ class Task:
 
 def enter_date():
     """
-    Enter date with validation
+    Enter date with validation. Datetime module helps to check whether it is a valid day and month.
 
     :return: date in format of DD/MM/YYYY
     """
@@ -34,9 +34,8 @@ def enter_date():
 
 def view_tasks(tasks, task_status):
     """
-    Function to view tasks (used for pending and completed tasks)
+    Function to print tasks (used for pending and completed tasks)
 
-    :return: pending or completed tasks as human readable string
     """
     counter = 0
 
@@ -59,7 +58,7 @@ def view_tasks(tasks, task_status):
         print("Task list is empty")
 
 
-def check_task_exist(tasks, task_id):
+def check_task_exist(tasks, task_id_input):
     """
     Check if task with given task ID exists in list of tasks
 
@@ -67,7 +66,7 @@ def check_task_exist(tasks, task_id):
     :param task_id: id of the task
     :return: boolean value that determines whether task exists
     """
-    return any(task.id == task_id for task in tasks)
+    return any(task.id == task_id_input for task in tasks)
 
 
 def main():
@@ -109,7 +108,16 @@ def main():
                 print("Task with ID " + str(task_id_input) + " does not exist")
 
         elif option == "4":
-            pass
+            task_id_input = int(input("Enter task ID\n"))
+
+            if check_task_exist(tasks, task_id_input):  # Check if ID exists in list of tasks at all
+                for index, task in enumerate(tasks):  # Enumarate used to receive index
+                    if task_id_input == task.id:
+                        tasks.pop(index)
+                        print("Task deleted successfully")
+            else:
+                print("Task with ID " + str(task_id_input) + " does not exist")
+
 
         elif option == "5":
             view_tasks(tasks, False)  # To view already completed tasks, False = completed tasks
