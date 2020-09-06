@@ -48,7 +48,6 @@ def enter_date():
 def view_tasks(tasks, task_status):
     """
     Function to print tasks (used for pending and completed tasks)
-
     """
     counter = 0
 
