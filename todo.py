@@ -7,9 +7,17 @@ from datetime import datetime
 
 
 class Task:
+    """
+    A class used to represent a single task as an object
+    """
     __last_id = 1
 
     def __init__(self, name, deadline, completed):
+        """
+        :param name: task name as human readable string
+        :param deadline: task deadline date as human readable string
+        :param completed: boolean to determine whether task is completed or not
+        """
         self.name = name
         self.deadline = deadline
         self.completed = completed
@@ -26,7 +34,8 @@ def enter_date():
     while True:
         task_deadline = input("Enter date in following format - DD/MM/YYYY:\n")
         try:
-            task_deadline_formatted = datetime.strptime(task_deadline, "%d/%m/%Y")  # Convert date in str to datetime for comparison
+            task_deadline_formatted = datetime.strptime(task_deadline,
+                                                        "%d/%m/%Y")  # Convert date in str to datetime for comparison
             current_date = datetime.today()  # To check if new task in not in the past date
             if task_deadline_formatted > current_date:
                 return task_deadline
@@ -127,7 +136,6 @@ def main():
                     print("Task with ID " + str(task_id_input) + " does not exist")
             except ValueError:
                 print("Invalid input")
-
 
         elif option == "5":
             view_tasks(tasks, False)  # To view already completed tasks, False = completed tasks
