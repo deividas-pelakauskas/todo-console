@@ -3,7 +3,7 @@ Author: Deividas Pelakauskas
 
 """
 
-import datetime
+from datetime import datetime
 
 
 class Task:
@@ -26,8 +26,12 @@ def enter_date():
     while True:
         task_deadline = input("Enter date in following format - DD/MM/YYYY:\n")
         try:
-            datetime.datetime.strptime(task_deadline, '%d/%m/%Y')
-            return task_deadline
+            task_deadline_formatted = datetime.strptime(task_deadline, "%d/%m/%Y")  # Convert date in str to datetime for comparison
+            current_date = datetime.today()  # To check if new task in not in the past date
+            if task_deadline_formatted > current_date:
+                return task_deadline
+            else:
+                print("Task date is in the past")
         except ValueError:
             print("Incorrect data format (DD/MM/YYYY) or other date related error")
 
@@ -63,7 +67,7 @@ def check_task_exist(tasks, task_id_input):
     Check if task with given task ID exists in list of tasks
 
     :param tasks: list of tasks
-    :param task_id: id of the task
+    :param task_id_input: id of the task
     :return: boolean value that determines whether task exists
     """
     return any(task.id == task_id_input for task in tasks)
@@ -95,28 +99,34 @@ def main():
             print("Successfully added new task")
 
         elif option == "3":
-            task_id_input = int(input("Enter task ID\n"))
+            try:
+                task_id_input = int(input("Enter task ID\n"))
 
-            if check_task_exist(tasks, task_id_input):  # Check if ID exists in list of tasks at all
-                for task in tasks:
-                    if task_id_input == task.id and task.completed is False:
-                        task.completed = True
-                        print("Operation completed successfully")
-                    elif task_id_input == task.id and task.completed is True:
-                        print("Task with ID " + str(task_id_input) + " has already been marked as completed")
-            else:
-                print("Task with ID " + str(task_id_input) + " does not exist")
+                if check_task_exist(tasks, task_id_input):  # Check if ID exists in list of tasks at all
+                    for task in tasks:
+                        if task_id_input == task.id and task.completed is False:
+                            task.completed = True
+                            print("Operation completed successfully")
+                        elif task_id_input == task.id and task.completed is True:
+                            print("Task with ID " + str(task_id_input) + " has already been marked as completed")
+                else:
+                    print("Task with ID " + str(task_id_input) + " does not exist")
+            except ValueError:
+                print("Invalid input")
 
         elif option == "4":
-            task_id_input = int(input("Enter task ID\n"))
+            try:
+                task_id_input = int(input("Enter task ID\n"))
 
-            if check_task_exist(tasks, task_id_input):  # Check if ID exists in list of tasks at all
-                for index, task in enumerate(tasks):  # Enumarate used to receive index
-                    if task_id_input == task.id:
-                        tasks.pop(index)
-                        print("Task deleted successfully")
-            else:
-                print("Task with ID " + str(task_id_input) + " does not exist")
+                if check_task_exist(tasks, task_id_input):  # Check if ID exists in list of tasks at all
+                    for index, task in enumerate(tasks):  # Enumarate used to receive index
+                        if task_id_input == task.id:
+                            tasks.pop(index)
+                            print("Task deleted successfully")
+                else:
+                    print("Task with ID " + str(task_id_input) + " does not exist")
+            except ValueError:
+                print("Invalid input")
 
 
         elif option == "5":
