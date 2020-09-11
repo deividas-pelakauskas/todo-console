@@ -55,7 +55,6 @@ def view_tasks(tasks, task_status):
     counter = 0
 
     if len(tasks) > 0:
-        print("\n")
         print("ID\tDEADLINE\tTASK")
 
         for task in tasks:
@@ -79,10 +78,12 @@ def add_task(tasks):
 
     :param tasks: list of tasks
     """
+
+    print("\nAdd task:")
     task_name = input("Enter task name:\n")
     task_deadline = enter_date()
     tasks.append(Task(task_name, task_deadline, False))
-    print("Successfully added new task")
+    print("Successfully added new task\n")
 
 
 def task_complete(tasks):
@@ -91,6 +92,8 @@ def task_complete(tasks):
 
     :param tasks: list of tasks
     """
+
+    print("\nMark task as completed:")
     try:
         task_id_input = int(input("Enter task ID\n"))
 
@@ -98,13 +101,13 @@ def task_complete(tasks):
             for task in tasks:
                 if task_id_input == task.id and task.completed is False:
                     task.completed = True
-                    print("Operation completed successfully")
+                    print("Operation completed successfully\n")
                 elif task_id_input == task.id and task.completed is True:
-                    print("Task with ID " + str(task_id_input) + " has already been marked as completed")
+                    print("Task with ID " + str(task_id_input) + " has already been marked as completed\n")
         else:
-            print("Task with ID " + str(task_id_input) + " does not exist")
+            print("Task with ID " + str(task_id_input) + " does not exist\n")
     except ValueError:
-        print("Invalid input")
+        print("Invalid input\n")
 
 
 def check_task_exist(tasks, task_id_input):
@@ -124,6 +127,7 @@ def delete_task(tasks):
     :param tasks: list of tasks
     """
 
+    print("Task deletion:")
     try:
         task_id_input = int(input("Enter task ID\n"))
 
@@ -131,11 +135,11 @@ def delete_task(tasks):
             for index, task in enumerate(tasks):  # Enumarate used to receive index to know which one to delete
                 if task_id_input == task.id:
                     tasks.pop(index)
-                    print("Task deleted successfully")
+                    print("Task deleted successfully\n")
         else:
-            print("Task with ID " + str(task_id_input) + " does not exist")
+            print("Task with ID " + str(task_id_input) + " does not exist\n")
     except ValueError:
-        print("Invalid input")
+        print("Invalid input\n")
 
 
 def overdue_tasks(tasks):
@@ -145,7 +149,7 @@ def overdue_tasks(tasks):
     :param tasks: list of tasks
     """
 
-    print("\nOVERDUE TASKS")
+    print("\nOverdue tasks:")
     print("ID\tDEADLINE\tTASK")
 
     counter = 0  # To count how many overdue tasks
@@ -179,6 +183,7 @@ def main():
                        "0. Exit\n")
 
         if option == "1":  # View current tasks
+            print("\nCurrent todo tasks:")
             view_tasks(tasks, True)  # To view current pending tasks, True = pending tasks
 
         elif option == "2":  # Add new task
@@ -191,6 +196,7 @@ def main():
             delete_task(tasks)
 
         elif option == "5":  # View completed tasks
+            print("\nCompleted tasks:")
             view_tasks(tasks, False)  # To view already completed tasks, False = completed tasks
 
         elif option == "6":  # View overdue tasks
