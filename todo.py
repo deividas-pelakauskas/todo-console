@@ -10,6 +10,7 @@ class Task:
     """
     A class used to represent a single task as an object
     """
+
     __last_id = 1
 
     def __init__(self, name, deadline, completed):
@@ -31,6 +32,7 @@ def enter_date():
 
     :return: date in format of DD/MM/YYYY
     """
+
     while True:
         task_deadline = input("Enter date in following format - DD/MM/YYYY:\n")
         try:
@@ -49,6 +51,7 @@ def view_tasks(tasks, task_status):
     """
     Function to print tasks (used for pending and completed tasks)
     """
+
     counter = 0
 
     if len(tasks) > 0:
@@ -70,6 +73,40 @@ def view_tasks(tasks, task_status):
         print("Task list is empty")
 
 
+def add_task(tasks):
+    """
+    Function to add tasks to list of objects
+
+    :param tasks: list of tasks
+    """
+    task_name = input("Enter task name:\n")
+    task_deadline = enter_date()
+    tasks.append(Task(task_name, task_deadline, False))
+    print("Successfully added new task")
+
+
+def task_complete(tasks):
+    """
+    Function to mark a task as completed
+
+    :param tasks: list of tasks
+    """
+    try:
+        task_id_input = int(input("Enter task ID\n"))
+
+        if check_task_exist(tasks, task_id_input):  # Check if ID exists in list of tasks at all
+            for task in tasks:
+                if task_id_input == task.id and task.completed is False:
+                    task.completed = True
+                    print("Operation completed successfully")
+                elif task_id_input == task.id and task.completed is True:
+                    print("Task with ID " + str(task_id_input) + " has already been marked as completed")
+        else:
+            print("Task with ID " + str(task_id_input) + " does not exist")
+    except ValueError:
+        print("Invalid input")
+
+
 def check_task_exist(tasks, task_id_input):
     """
     Check if task with given task ID exists in list of tasks
@@ -79,6 +116,49 @@ def check_task_exist(tasks, task_id_input):
     :return: boolean value that determines whether task exists
     """
     return any(task.id == task_id_input for task in tasks)
+
+
+def delete_task(tasks):
+    """
+    Delete task by ID (if task exists)
+    :param tasks: list of tasks
+    """
+
+    try:
+        task_id_input = int(input("Enter task ID\n"))
+
+        if check_task_exist(tasks, task_id_input):  # Check if ID exists in list of tasks at all
+            for index, task in enumerate(tasks):  # Enumarate used to receive index to know which one to delete
+                if task_id_input == task.id:
+                    tasks.pop(index)
+                    print("Task deleted successfully")
+        else:
+            print("Task with ID " + str(task_id_input) + " does not exist")
+    except ValueError:
+        print("Invalid input")
+
+
+def overdue_tasks(tasks):
+    """
+    Check and print overdue tasks
+
+    :param tasks: list of tasks
+    """
+
+    print("\nOVERDUE TASKS")
+    print("ID\tDEADLINE\tTASK")
+
+    counter = 0  # To count how many overdue tasks
+
+    for task in tasks:
+        if datetime.strptime(task.deadline, "%d/%m/%Y") < datetime.today():
+            print(str(task.id) + "\t" + task.deadline + "\t" + task.name)
+            counter += 1
+
+    if counter == 0:
+        print("NO OVERDUE TASKS, WELL DONE!")
+
+    print("\n")
 
 
 def main():
@@ -95,55 +175,33 @@ def main():
                        "3. Mark as completed\n"
                        "4. Delete task\n"
                        "5. View completed tasks\n"
+                       "6. View overdue tasks\n"
                        "0. Exit\n")
 
-        if option == "1":
+        if option == "1":  # View current tasks
             view_tasks(tasks, True)  # To view current pending tasks, True = pending tasks
 
-        elif option == "2":
-            task_name = input("Enter task name:\n")
-            task_deadline = enter_date()
-            tasks.append(Task(task_name, task_deadline, False))
-            print("Successfully added new task")
+        elif option == "2":  # Add new task
+            add_task(tasks)
 
-        elif option == "3":
-            try:
-                task_id_input = int(input("Enter task ID\n"))
+        elif option == "3":  # Mark task as completed
+            task_complete(tasks)
 
-                if check_task_exist(tasks, task_id_input):  # Check if ID exists in list of tasks at all
-                    for task in tasks:
-                        if task_id_input == task.id and task.completed is False:
-                            task.completed = True
-                            print("Operation completed successfully")
-                        elif task_id_input == task.id and task.completed is True:
-                            print("Task with ID " + str(task_id_input) + " has already been marked as completed")
-                else:
-                    print("Task with ID " + str(task_id_input) + " does not exist")
-            except ValueError:
-                print("Invalid input")
+        elif option == "4":  # Delete task
+            delete_task(tasks)
 
-        elif option == "4":
-            try:
-                task_id_input = int(input("Enter task ID\n"))
-
-                if check_task_exist(tasks, task_id_input):  # Check if ID exists in list of tasks at all
-                    for index, task in enumerate(tasks):  # Enumarate used to receive index
-                        if task_id_input == task.id:
-                            tasks.pop(index)
-                            print("Task deleted successfully")
-                else:
-                    print("Task with ID " + str(task_id_input) + " does not exist")
-            except ValueError:
-                print("Invalid input")
-
-        elif option == "5":
+        elif option == "5":  # View completed tasks
             view_tasks(tasks, False)  # To view already completed tasks, False = completed tasks
 
-        elif option == "0":
+        elif option == "6":  # View overdue tasks
+            overdue_tasks(tasks)
+
+        elif option == "0":  # Exit the program
             menu_status = False
 
         else:
             print("Unrecognised option")
 
 
-main()
+if __name__ == "__main__":
+    main()
